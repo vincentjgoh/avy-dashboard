@@ -2,6 +2,7 @@
 ;; avy-dashboard, adding jump targets to dashboard items.
 
 (require 'dashboard)
+(require 'avy)
 
 (defvar avy-dashboard--backing-item-lists
   '((recents . recentf-list)
@@ -17,6 +18,10 @@ active, the dashboard shortcuts are unavailable."
 
   (unless (eq major-mode 'dashboard-mode)
     (user-error "Can only be used in dashboard-mode buffers."))
+
+  ;; Refresh the dashboard first, because if any of the layout changes (i.e., the banner changes, etc.) the offsets that avy
+  ;; generates will be wrong.
+  (dashboard-refresh-buffer)
 
   (let ((win (selected-window))
 	(pos-list))
@@ -55,12 +60,9 @@ active, the dashboard shortcuts are unavailable."
 		(push (cons pos win) pos-list))))
 	  )))
 
-	(dashboard-refresh-buffer)
     (let ((selection (avy-process pos-list)))
       ;; avy-process returns the 'pos' of the selected candidate
       (when (numberp selection)
 	(goto-char selection)))))
-
-(define-key dashboard-mode-map (kbd "a") 'avy-dashboard)
 
 (provide 'avy-dashboard)
