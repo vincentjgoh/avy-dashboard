@@ -55,11 +55,12 @@ active, the dashboard shortcuts are unavailable."
 		(push (cons pos win) pos-list))))
 	  )))
 
+	(dashboard-refresh-buffer)
     (let ((selection (avy-process pos-list)))
       ;; avy-process returns the 'pos' of the selected candidate
       (when (numberp selection)
 	(goto-char selection)))))
 
-(define-key dashboard-mode-map (kbd "a") (lambda () (interactive) (dashboard-refresh-buffer) (avy-dashboard)))
+(define-key dashboard-mode-map (kbd "a") 'avy-dashboard)
 
 (provide 'avy-dashboard)
